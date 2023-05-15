@@ -34,6 +34,8 @@ let jokes = [
   }
 ];
 
+console.log('jokes are:', jokes)
+
 // serve back static files
 app.use(express.static('server/public'));
 
@@ -43,9 +45,19 @@ app.get('/jokes', function(req,res) {
   })
 
 app.post('/jokes', function(req,res) {
+  let whoseJoke = req.body.whoseJoke;
+  let jokeQuestion = req.body.jokeQuestion;
+  let punchLine = req.body.punchLine;
+
   console.log('POST /jokes request made');
   console.log('req.body is :', req.body);
-  jokes.push(req.body);
+
+  let joke = {
+    whoseJoke: whoseJoke,
+    jokeQuestion: jokeQuestion,
+    punchLine: punchLine
+    }
+  jokes.push(joke);
   res.sendStatus(201);
 })
 
