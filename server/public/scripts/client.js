@@ -6,11 +6,13 @@ function onReady() {
     console.log('DOM ready');
 
     $('#addJokeButton').on('click', addJoke);
+   
     getJokes();
 }
 
 function addJoke(event) {
     event.preventDefault();
+    
     $.ajax({
         method: 'POST',
         url: '/jokes',
@@ -25,13 +27,13 @@ function addJoke(event) {
     }).catch(function(error){
         console.log('POST /jokes failed');
         console.log('error', error);
-    })
+    });
 }
     
 function getJokes(){
     $.ajax({
         method: 'GET',
-        url: '/jokes'
+        url: '/jokes',
         }).then(function(response){
         console.log('The joke is:', response);
         renderToDom(response);
