@@ -10,7 +10,7 @@ let jokes = [
   {
     whoseJoke: "Danny",
     jokeQuestion: "Why do scuba divers fall backwards out of boats?",
-    punchLine: "If they fell forwards they’d still be in the boat!"
+    punchLine: "If they fell forwards they would still be in the boat!"
   },
   {
     whoseJoke: "Luke",
@@ -36,6 +36,20 @@ let jokes = [
 
 // serve back static files
 app.use(express.static('server/public'));
+
+app.get('/jokes', function(req,res) {
+  console.log('GET /jokes request made', jokes);
+  res.send(jokes);
+  })
+
+app.post('/jokes', function(req,res) {
+  console.log('POST /jokes request made');
+  console.log('req.body is :', req.body);
+  jokes.push(req.body);
+  res.sendStatus(201);
+})
+
+
 
 app.listen(PORT, () => {
   console.log('server running on: ', PORT);
