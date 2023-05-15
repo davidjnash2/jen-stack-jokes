@@ -6,56 +6,52 @@ function onReady() {
     console.log('DOM ready');
 
     $('#addJokeButton').on('click', addJoke);
+    getJokes();
 }
 
 function addJoke(event) {
     event.preventDefault();
-    let newjoke = {
-        whoseJoke: $('#whoseJokeIn').val(),
-        jokeQuestion: $('#questionIn').val(),
-        punchLine: $('#punchlineIn').val(),
-    }
-
-    console.log('new joke is:', newjoke);
-
     $.ajax({
         method: 'POST',
         url: '/jokes',
-        data: newJoke
+        data: {
+            whoseJoke: $('#whoseJokeIn').val(),
+            jokeQuestion: $('#questionIn').val(),
+            punchLine: $('#punchlineIn').val(),
+        }
     }).then(function (response){
+        console.log('joke added!');
         getJokes();
     }).catch(function(error){
         console.log('POST /jokes failed');
         console.log('error', error);
     })
-
-    function getJokes(){
-        $.ajax({
-            method: 'GET',
-            url: '/jokes'
-        }).then(function(response){
-            $()
-        })
-    }
-
-
-
 }
+    
+function getJokes(){
+    $.ajax({
+        method: 'GET',
+        url: '/jokes'
+        }).then(function(response){
+        console.log('The joke is:', response);
+        renderToDom(response);
+        }).catch(function(error){
+            alert('Get jokes failed!');
+            console.log('get jokes failed', error);
+        });
+}
+
+
+
+
 
 
 function renderToDom(jokes){
     $('#outputDiv').empty();
     console.log('The jokes are:', jokes);
     for (let joke of jokes){
-      // conditional for winner
-      $('#guesses-body').append(`
-        <tr>
-          <td>${rounds++}</td>
-          <td>${result.guess1}</td>
-          <td>${result.result1}</td>
-          <td>${result.guess2}</td>
-          <td>${result.result2}</td>
-        </tr>
-      `)
+      $('#jokesGoHere').append(`
+        <li>${joke.whoseJoke} ${joke.jokeQuestion} ${joke.punchLine}</li>
+      `);
     }
   }
